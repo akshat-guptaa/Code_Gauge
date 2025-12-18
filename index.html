@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeGauge | AI That Codes Like You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00cc6a;
+            --accent-glow: rgba(0, 255, 136, 0.15);
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7a;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(0, 255, 136, 0.2);
+            --gradient-primary: linear-gradient(135deg, #00ff88 0%, #00cc6a 50%, #00aa55 100%);
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-display); background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0.03; pointer-events: none; z-index: 1000; }
+        .gradient-orb { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
+        .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%); top: -200px; right: -100px; opacity: 0.15; }
+        .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%); bottom: 20%; left: -100px; opacity: 0.1; }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 1.2rem; color: var(--bg-primary); }
+        .logo-text { font-weight: 700; font-size: 1.4rem; color: var(--text-primary); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--accent-primary); }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-ghost { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary); }
+        .btn-ghost:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .btn-primary { background: var(--gradient-primary); border: none; color: var(--bg-primary); box-shadow: 0 0 30px var(--accent-glow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0, 255, 136, 0.3); }
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden; }
+        .hero-content { max-width: 1400px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 255, 136, 0.1); border: 1px solid var(--border-accent); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 1.5rem; font-family: var(--font-mono); }
+        .hero-badge::before { content: ''; width: 8px; height: 8px; background: var(--accent-primary); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .hero h1 { font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+        .hero h1 span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 540px; margin-bottom: 2rem; line-height: 1.7; }
+        .hero-visual { position: relative; }
+        .code-window { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .code-header { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; background: var(--bg-tertiary); border-bottom: 1px solid var(--border-subtle); }
+        .code-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #febc2e; }
+        .code-dot.green { background: #28c840; }
+        .code-title { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted); margin-left: 1rem; }
+        .code-body { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.8; }
+        .code-comment { color: var(--text-muted); }
+        .code-keyword { color: var(--accent-purple); }
+        .code-function { color: var(--accent-blue); }
+        .code-string { color: var(--accent-primary); }
+        .code-variable { color: var(--accent-orange); }
+        .personalization-badge { position: absolute; background: var(--bg-card); border: 1px solid var(--border-accent); padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: float 3s ease-in-out infinite; }
+        .personalization-badge.top { top: -20px; right: 20px; }
+        .personalization-badge.bottom { bottom: 40px; left: -30px; animation-delay: 1s; }
+        .badge-icon { width: 28px; height: 28px; background: rgba(0, 255, 136, 0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .badge-text { color: var(--text-secondary); }
+        .badge-text strong { color: var(--accent-primary); display: block; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        section { padding: 6rem 2rem; position: relative; }
+        .section-container { max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-label { display: inline-block; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+        .section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
+        .section-subtitle { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .mission-section { background: var(--bg-secondary); padding: 8rem 2rem; }
+        .mission-content { max-width: 900px; margin: 0 auto; text-align: center; }
+        .mission-icon { width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; font-size: 2.5rem; }
+        .mission-statement { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; line-height: 1.5; margin-bottom: 2rem; }
+        .mission-statement span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .mission-description { font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8; max-width: 700px; margin: 0 auto; }
+        .mission-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem; }
+        .value-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 2rem; text-align: left; transition: all 0.3s; }
+        .value-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .value-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .value-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .value-card p { color: var(--text-secondary); font-size: 0.95rem; }
+        .problem-section { background: var(--bg-primary); }
+        .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .problem-card { background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 2rem; transition: all 0.3s; }
+        .problem-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .problem-icon { width: 56px; height: 56px; background: rgba(249, 115, 22, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .problem-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .problem-card p { color: var(--text-secondary); font-size: 0.95rem; }
+        .features-section { background: var(--bg-secondary); }
+        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .feature-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 2.5rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient-primary); opacity: 0; transition: opacity 0.3s; }
+        .feature-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .feature-icon { width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .feature-header h3 { font-size: 1.25rem; font-weight: 600; }
+        .feature-header span { font-size: 0.9rem; color: var(--text-muted); }
+        .feature-description { color: var(--text-secondary); font-size: 1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .feature-benefits { list-style: none; }
+        .feature-benefits li { display: flex; align-items: flex-start; gap: 0.75rem; color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.75rem; }
+        .feature-benefits li::before { content: '✓'; color: var(--accent-primary); font-weight: 700; }
+        .how-section { background: var(--bg-primary); }
+        .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; position: relative; }
+        .how-grid::before { content: ''; position: absolute; top: 60px; left: 20%; right: 20%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-primary), transparent); opacity: 0.3; }
+        .how-card { text-align: center; position: relative; }
+        .how-number { width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-family: var(--font-mono); font-weight: 700; font-size: 1.5rem; color: var(--bg-primary); position: relative; z-index: 2; }
+        .how-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .how-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+        .usecases-section { background: var(--bg-secondary); }
+        .usecases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .usecase-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 2rem; transition: all 0.3s; text-align: center; }
+        .usecase-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .usecase-icon { width: 70px; height: 70px; background: rgba(0, 255, 136, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; }
+        .usecase-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .usecase-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+        .vision-section { background: var(--bg-primary); padding: 8rem 2rem; }
+        .vision-content { max-width: 1000px; margin: 0 auto; }
+        .vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .vision-text h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .vision-text h2 span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .vision-text p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+        .vision-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .vision-stat { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .vision-stat-value { font-size: 2rem; font-weight: 700; color: var(--accent-primary); font-family: var(--font-mono); margin-bottom: 0.25rem; }
+        .vision-stat-label { font-size: 0.9rem; color: var(--text-muted); }
+        .cta-section { background: linear-gradient(180deg, #0a0a0f 0%, #12121a 100%); text-align: center; padding: 8rem 2rem; }
+        .cta-content { max-width: 700px; margin: 0 auto; }
+        .cta-content h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+        .cta-content h2 span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cta-content p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .cta-note { margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted); }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border-subtle); padding: 4rem 2rem 2rem; }
+        .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-brand { max-width: 350px; }
+        .footer-brand .logo { margin-bottom: 1rem; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+        .footer-column h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1.25rem; }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 0.75rem; }
+        .footer-column a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-column a:hover { color: var(--accent-primary); }
+        .footer-bottom { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 1rem; }
+        .footer-bottom p { color: var(--text-muted); font-size: 0.85rem; }
+        .footer-social { display: flex; gap: 1rem; }
+        .footer-social a { width: 40px; height: 40px; background: var(--bg-tertiary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; transition: all 0.2s; }
+        .footer-social a:hover { background: var(--accent-primary); color: var(--bg-primary); }
+        @media (max-width: 1200px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-visual { margin-top: 3rem; }
+            .hero-subtitle { margin-left: auto; margin-right: auto; }
+            .vision-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .mission-values { grid-template-columns: 1fr; }
+            .personalization-badge.bottom { left: 10px; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .problem-grid, .usecases-grid, .how-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .vision-stats { grid-template-columns: 1fr; }
+            .how-grid::before { display: none; }
+            .personalization-badge { display: none; }
+        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo"><div class="logo-icon">CG</div><span class="logo-text">CodeGauge</span></a>
+            <ul class="nav-links">
+                <li><a href="#mission">Mission</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#usecases">Use Cases</a></li>
+                <li><a href="#vision">Vision</a></li>
+            </ul>
+            <div class="nav-cta"><a href="#contact" class="btn btn-primary">Get in Touch</a></div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Building the Future of Developer Intelligence</div>
+                <h1>AI That Codes<br><span>Like You</span></h1>
+                <p class="hero-subtitle">CodeGauge learns your coding style, remembers your past solutions, and generates code that feels like you wrote it — personalized, contextual, and truly helpful.</p>
+            </div>
+            <div class="hero-visual">
+                <div class="personalization-badge top"><div class="badge-icon">🎯</div><div class="badge-text"><strong>Your Style</strong>snake_case detected</div></div>
+                <div class="code-window">
+                    <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-title">personalized_suggestion.py</span></div>
+                    <div class="code-body">
+                        <div><span class="code-comment"># Generated based on YOUR coding patterns</span></div>
+                        <div><span class="code-comment"># Matches your style: snake_case, list comprehensions</span></div>
+                        <div></div>
+                        <div><span class="code-keyword">def</span> <span class="code-function">fetch_user_data</span>(user_ids: <span class="code-variable">list</span>) -> <span class="code-variable">dict</span>:</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"""Fetch user data with proper error handling."""</span></div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">try</span>:</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response = api.<span class="code-function">get</span>(<span class="code-string">"/users"</span>, ids=user_ids)</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> response.status_code == <span class="code-variable">200</span>:</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {u[<span class="code-string">"id"</span>]: u <span class="code-keyword">for</span> u <span class="code-keyword">in</span> response.json()}</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">except</span> <span class="code-variable">APIError</span> <span class="code-keyword">as</span> e:</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.<span class="code-function">error</span>(f<span class="code-string">"Failed: {e}"</span>)</div>
+                    </div>
+                </div>
+                <div class="personalization-badge bottom"><div class="badge-icon">🧠</div><div class="badge-text"><strong>Context Aware</strong>From your past work</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section" id="mission">
+        <div class="mission-content reveal">
+            <div class="mission-icon">🎯</div>
+            <h2 class="mission-statement">We believe AI should learn from you, <span>not the other way around</span>.</h2>
+            <p class="mission-description">Generic AI tools treat all developers the same. They suggest code that doesn't match your style, ignore your project context, and forget everything between sessions. CodeGauge is building a Developer Intelligence Platform that learns your patterns, remembers your solutions, and generates code that's truly personalized to how you work.</p>
+            <div class="mission-values">
+                <div class="value-card"><div class="value-icon">🎨</div><h3>Personalized Generation</h3><p>Code suggestions match your naming conventions, patterns, and style preferences. Every suggestion feels like you wrote it.</p></div>
+                <div class="value-card"><div class="value-icon">🧠</div><h3>Context Intelligence</h3><p>We remember your past solutions, understand your project structure, and surface relevant knowledge when you need it.</p></div>
+                <div class="value-card"><div class="value-icon">⚡</div><h3>Smart Assistance</h3><p>Help arrives when you're stuck, not when you're in flow. Zero interruptions until you actually need assistance.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-container">
+            <div class="section-header reveal"><span class="section-label">The Problem</span><h2 class="section-title">Why Current AI Tools Fall Short</h2><p class="section-subtitle">Generic AI assistants are one-size-fits-none. They ignore who you are as a developer.</p></div>
+            <div class="problem-grid">
+                <div class="problem-card reveal"><div class="problem-icon">🎯</div><h3>No Personalization</h3><p>They don't know your coding style, skill level, or preferences. Every suggestion feels generic because it is generic.</p></div>
+                <div class="problem-card reveal"><div class="problem-icon">🧠</div><h3>Zero Context Memory</h3><p>They forget everything between sessions. You've solved this problem before, but your AI has no idea.</p></div>
+                <div class="problem-card reveal"><div class="problem-icon">⏰</div><h3>Bad Timing</h3><p>They interrupt when you're in flow, stay silent when you're stuck. Random autocomplete breaks concentration.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <div class="section-container">
+            <div class="section-header reveal"><span class="section-label">Core Features</span><h2 class="section-title">Intelligence That Understands You</h2><p class="section-subtitle">CodeGauge builds a complete understanding of how you code, enabling truly personalized assistance.</p></div>
+            <div class="features-grid reveal">
+                <div class="feature-card">
+                    <div class="feature-header"><div class="feature-icon">🎨</div><div><h3>Personalized Code Generation</h3><span>Your Style, Every Time</span></div></div>
+                    <p class="feature-description">AI suggestions that match your coding DNA — naming conventions, function structures, patterns you prefer, and error handling style.</p>
+                    <ul class="feature-benefits"><li>Detects your naming style (snake_case, camelCase, etc.)</li><li>Matches your preferred patterns (list comprehensions, decorators)</li><li>Adapts to your skill level and complexity preferences</li><li>Generates docstrings and comments in your style</li></ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header"><div class="feature-icon">🧠</div><div><h3>Context & Knowledge Memory</h3><span>Nothing Gets Forgotten</span></div></div>
+                    <p class="feature-description">Your personal knowledge graph that remembers solutions you've written, patterns you've used, and context from every project.</p>
+                    <ul class="feature-benefits"><li>"You solved OAuth integration in Project X — here's that solution"</li><li>Instantly recover context when returning to old projects</li><li>Surface relevant past work when facing similar problems</li><li>Track how your solutions have evolved over time</li></ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header"><div class="feature-icon">🛡️</div><div><h3>Error Prevention AI</h3><span>Mistakes Caught Early</span></div></div>
+                    <p class="feature-description">Learns from your mistake patterns and warns you before you make the same error twice.</p>
+                    <ul class="feature-benefits"><li>"You've made this exact mistake 3 times before"</li><li>Shows what solutions worked in previous instances</li><li>Predicts potential bugs based on your patterns</li><li>Proactive warnings, not reactive debugging</li></ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header"><div class="feature-icon">⚡</div><div><h3>Intelligent Stuck Detection</h3><span>Help When You Need It</span></div></div>
+                    <p class="feature-description">Multi-signal algorithm detects when you're actually struggling — and only offers help then. No random interruptions.</p>
+                    <ul class="feature-benefits"><li>Monitors typing patterns, deletions, and undo frequency</li><li>Detects frustration signals like repeated errors</li><li>Asks permission before offering suggestions</li><li>Zero AI cost until you confirm you want help</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section" id="how">
+        <div class="section-container">
+            <div class="section-header reveal"><span class="section-label">How It Works</span><h2 class="section-title">From Your Code to Your AI</h2><p class="section-subtitle">CodeGauge learns continuously from how you work, building a personalized intelligence layer.</p></div>
+            <div class="how-grid reveal">
+                <div class="how-card"><div class="how-number">1</div><h3>Learn Your Patterns</h3><p>We analyze your git history, coding style, and real-time behavior to understand how you write code — naming conventions, patterns, complexity preferences.</p></div>
+                <div class="how-card"><div class="how-number">2</div><h3>Build Your Context</h3><p>Your solutions, decisions, and knowledge get indexed into a personal knowledge graph. Every problem you solve becomes retrievable context.</p></div>
+                <div class="how-card"><div class="how-number">3</div><h3>Generate Personalized Code</h3><p>When you need help, we combine your style profile with your knowledge graph to generate suggestions that feel like they came from you.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="usecases-section" id="usecases">
+        <div class="section-container">
+            <div class="section-header reveal"><span class="section-label">Use Cases</span><h2 class="section-title">Built for Real Developer Workflows</h2><p class="section-subtitle">From individual productivity to team knowledge management.</p></div>
+            <div class="usecases-grid reveal">
+                <div class="usecase-card"><div class="usecase-icon">👩‍💻</div><h3>Personal Productivity</h3><p>AI that learns your style, remembers your solutions, and helps exactly when you need it — without interrupting your flow.</p></div>
+                <div class="usecase-card"><div class="usecase-icon">🔄</div><h3>Context Recovery</h3><p>Return to old projects with instant context. "You worked on auth 2 months ago — here's everything you need to remember."</p></div>
+                <div class="usecase-card"><div class="usecase-icon">👥</div><h3>Team Knowledge</h3><p>Preserve solutions when team members leave. Surface relevant past work to anyone who needs it.</p></div>
+                <div class="usecase-card"><div class="usecase-icon">🚀</div><h3>Faster Onboarding</h3><p>New team members get personalized guidance based on their skill level and the codebase context they need.</p></div>
+                <div class="usecase-card"><div class="usecase-icon">🎓</div><h3>Learning & Growth</h3><p>Track your skill evolution over time. Get suggestions that gently push you toward better patterns.</p></div>
+                <div class="usecase-card"><div class="usecase-icon">🛡️</div><h3>Error Reduction</h3><p>Stop making the same mistakes. Proactive warnings based on your personal error patterns.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="vision-section" id="vision">
+        <div class="vision-content reveal">
+            <div class="vision-grid">
+                <div class="vision-text"><span class="section-label">Our Vision</span><h2>The Future of <span>Personalized AI</span></h2><p>We're building toward a world where every developer has AI that truly understands them — their strengths, their patterns, their history. Where switching projects doesn't mean losing context.</p><p>AI should adapt to you. Not the other way around.</p></div>
+                <div class="vision-stats">
+                    <div class="vision-stat"><div class="vision-stat-value">100%</div><div class="vision-stat-label">Style-matched suggestions</div></div>
+                    <div class="vision-stat"><div class="vision-stat-value">∞</div><div class="vision-stat-label">Context memory retention</div></div>
+                    <div class="vision-stat"><div class="vision-stat-value">&lt;$0.10</div><div class="vision-stat-label">Target cost per user/day</div></div>
+                    <div class="vision-stat"><div class="vision-stat-value">0</div><div class="vision-stat-label">Unwanted interruptions</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-content reveal">
+            <h2>Ready for AI That <span>Gets You</span>?</h2>
+            <p>We're building the future of personalized developer intelligence. Interested in early access, partnerships, or just want to learn more?</p>
+            <div class="cta-buttons">
+                <a href="mailto:hello@codegauge.dev" class="btn btn-primary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Get in Touch</a>
+                <a href="#" class="btn btn-ghost">Follow Our Journey</a>
+            </div>
+            <p class="cta-note">Currently in development • Seeking early partners and design partners</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand"><a href="#" class="logo"><div class="logo-icon">CG</div><span class="logo-text">CodeGauge</span></a><p>AI that codes like you. We're building a Developer Intelligence Platform that learns your patterns, remembers your solutions, and generates truly personalized code suggestions.</p></div>
+            <div class="footer-column"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#how">How It Works</a></li><li><a href="#usecases">Use Cases</a></li><li><a href="#vision">Vision</a></li></ul></div>
+            <div class="footer-column"><h4>Company</h4><ul><li><a href="#mission">Mission</a></li><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#contact">Contact</a></li></ul></div>
+            <div class="footer-column"><h4>Connect</h4><ul><li><a href="#">Twitter</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">GitHub</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><p>© 2025 CodeGauge. All rights reserved.</p><div class="footer-social"><a href="#">𝕏</a><a href="#">GH</a><a href="#">in</a></div></div>
+    </footer>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        function checkReveal() { reveals.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 150) el.classList.add('active'); }); }
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
+        document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', e => { e.preventDefault(); document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); }); });
+    </script>
+</body>
+</html>
