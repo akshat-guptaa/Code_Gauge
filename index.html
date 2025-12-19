@@ -6,421 +6,2314 @@
     <title>CodeGauge | AI That Codes Like You</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root{--bg-primary:#0a0a0f;--bg-secondary:#12121a;--bg-tertiary:#1a1a25;--bg-card:#16161f;--accent-primary:#00ff88;--accent-secondary:#00cc6a;--accent-glow:rgba(0,255,136,0.15);--accent-purple:#8b5cf6;--accent-blue:#3b82f6;--accent-orange:#f97316;--accent-yellow:#fbbf24;--text-primary:#fff;--text-secondary:#a0a0b0;--text-muted:#6b6b7a;--border-subtle:rgba(255,255,255,0.06);--border-accent:rgba(0,255,136,0.2);--gradient-primary:linear-gradient(135deg,#00ff88 0%,#00cc6a 50%,#00aa55 100%);--font-display:'Outfit',sans-serif;--font-mono:'JetBrains Mono',monospace}
-        *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font-display);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
-        .announcement-bar{background:linear-gradient(90deg,var(--accent-orange),var(--accent-yellow));color:var(--bg-primary);text-align:center;padding:.75rem 1rem;font-size:.9rem;font-weight:600;position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:center;gap:.5rem}
-        .announcement-bar span{background:var(--bg-primary);color:var(--accent-yellow);padding:.15rem .5rem;border-radius:4px;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
-        .gradient-orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}.orb-1{width:600px;height:600px;background:radial-gradient(circle,var(--accent-primary) 0%,transparent 70%);top:-200px;right:-100px;opacity:.15}.orb-2{width:400px;height:400px;background:radial-gradient(circle,var(--accent-purple) 0%,transparent 70%);bottom:20%;left:-100px;opacity:.1}
-        nav{position:fixed;top:44px;left:0;right:0;z-index:100;padding:1rem 2rem;background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-subtle)}
-        .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-        .logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}.logo-icon{width:40px;height:40px;background:var(--gradient-primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:1.2rem;color:var(--bg-primary)}.logo-text{font-weight:700;font-size:1.4rem;color:var(--text-primary)}
-        .nav-links{display:flex;gap:2.5rem;list-style:none}.nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:.95rem;transition:color .2s}.nav-links a:hover{color:var(--accent-primary)}
-        .btn{padding:.75rem 1.5rem;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}.btn-ghost{background:transparent;border:1px solid var(--border-subtle);color:var(--text-primary)}.btn-ghost:hover{border-color:var(--accent-primary);color:var(--accent-primary)}.btn-primary{background:var(--gradient-primary);border:none;color:var(--bg-primary);box-shadow:0 0 30px var(--accent-glow)}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(0,255,136,0.3)}
-        .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:10rem 2rem 4rem;position:relative;overflow:hidden}
-        .hero-content{max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-        .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,255,136,0.1);border:1px solid var(--border-accent);padding:.5rem 1rem;border-radius:100px;font-size:.85rem;color:var(--accent-primary);margin-bottom:1.5rem;font-family:var(--font-mono)}
-        .hero-badge::before{content:'';width:8px;height:8px;background:var(--accent-primary);border-radius:50%;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-        .hero h1{font-size:clamp(3rem,6vw,4.5rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.5rem}.hero h1 span{background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .hero-subtitle{font-size:1.25rem;color:var(--text-secondary);max-width:540px;margin-bottom:2rem;line-height:1.7}
-        .repo-badges{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap}.repo-badge{display:flex;align-items:center;gap:.5rem;background:var(--bg-card);border:1px solid var(--border-subtle);padding:.5rem 1rem;border-radius:8px;font-size:.85rem;color:var(--text-secondary)}.repo-badge svg{width:20px;height:20px}
-        .hero-visual{position:relative}
-        .code-window{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5)}
-        .code-header{display:flex;align-items:center;gap:.5rem;padding:1rem 1.5rem;background:var(--bg-tertiary);border-bottom:1px solid var(--border-subtle)}
-        .code-dot{width:12px;height:12px;border-radius:50%}.code-dot.red{background:#ff5f57}.code-dot.yellow{background:#febc2e}.code-dot.green{background:#28c840}
-        .code-title{font-family:var(--font-mono);font-size:.85rem;color:var(--text-muted);margin-left:1rem}
-        .code-body{padding:1.5rem;font-family:var(--font-mono);font-size:.9rem;line-height:1.8}
-        .code-comment{color:var(--text-muted)}.code-keyword{color:var(--accent-purple)}.code-function{color:var(--accent-blue)}.code-string{color:var(--accent-primary)}.code-variable{color:var(--accent-orange)}
-        .personalization-badge{position:absolute;background:var(--bg-card);border:1px solid var(--border-accent);padding:.75rem 1rem;border-radius:10px;font-size:.85rem;display:flex;align-items:center;gap:.5rem;box-shadow:0 10px 30px rgba(0,0,0,0.3);animation:float 3s ease-in-out infinite}
-        .personalization-badge.top{top:-20px;right:20px}.personalization-badge.bottom{bottom:40px;left:-30px;animation-delay:1s}
-        .badge-icon{width:28px;height:28px;background:rgba(0,255,136,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center}.badge-text{color:var(--text-secondary)}.badge-text strong{color:var(--accent-primary);display:block}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        section{padding:6rem 2rem;position:relative}.section-container{max-width:1400px;margin:0 auto}.section-header{text-align:center;margin-bottom:4rem}
-        .section-label{display:inline-block;font-family:var(--font-mono);font-size:.85rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
-        .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-bottom:1rem}
-        .section-subtitle{font-size:1.1rem;color:var(--text-secondary);max-width:600px;margin:0 auto}
-        .mission-section{background:var(--bg-secondary);padding:8rem 2rem}.mission-content{max-width:900px;margin:0 auto;text-align:center}
-        .mission-icon{width:80px;height:80px;background:var(--gradient-primary);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-size:2.5rem}
-        .mission-statement{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:600;line-height:1.5;margin-bottom:2rem}.mission-statement span{background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .mission-description{font-size:1.15rem;color:var(--text-secondary);line-height:1.8;max-width:700px;margin:0 auto}
-        .mission-values{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:4rem}
-        .value-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:2rem;text-align:left;transition:all .3s}.value-card:hover{border-color:var(--accent-primary);transform:translateY(-4px)}
-        .value-icon{font-size:2rem;margin-bottom:1rem}.value-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}.value-card p{color:var(--text-secondary);font-size:.95rem}
-        .benefits-section{background:var(--bg-primary)}.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
-        .benefit-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:2rem;text-align:center;transition:all .3s}.benefit-card:hover{border-color:var(--accent-primary);transform:translateY(-4px)}
-        .benefit-icon{width:64px;height:64px;background:rgba(0,255,136,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.75rem}
-        .benefit-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}.benefit-card p{color:var(--text-secondary);font-size:.9rem;line-height:1.5}
-        .problem-section{background:var(--bg-secondary)}.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
-        .problem-card{background:linear-gradient(145deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0) 100%);border:1px solid var(--border-subtle);border-radius:16px;padding:2rem;transition:all .3s}.problem-card:hover{border-color:var(--accent-primary);transform:translateY(-4px)}
-        .problem-icon{width:56px;height:56px;background:rgba(249,115,22,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.5rem}
-        .problem-card h3{font-size:1.25rem;font-weight:600;margin-bottom:.75rem}.problem-card p{color:var(--text-secondary);font-size:.95rem}
-        .features-section{background:var(--bg-primary)}.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
-        .feature-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;padding:2.5rem;transition:all .3s;position:relative;overflow:hidden}
-        .feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-primary);opacity:0;transition:opacity .3s}
-        .feature-card:hover{border-color:var(--accent-primary);transform:translateY(-4px)}.feature-card:hover::before{opacity:1}
-        .feature-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
-        .feature-icon{width:60px;height:60px;background:var(--gradient-primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
-        .feature-header h3{font-size:1.25rem;font-weight:600}.feature-header span{font-size:.9rem;color:var(--text-muted)}
-        .feature-description{color:var(--text-secondary);font-size:1rem;line-height:1.7;margin-bottom:1.5rem}
-        .feature-benefits{list-style:none}.feature-benefits li{display:flex;align-items:flex-start;gap:.75rem;color:var(--text-secondary);font-size:.95rem;margin-bottom:.75rem}.feature-benefits li::before{content:'✓';color:var(--accent-primary);font-weight:700}
-        .how-section{background:var(--bg-secondary)}.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;position:relative}
-        .how-grid::before{content:'';position:absolute;top:60px;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--accent-primary),transparent);opacity:.3}
-        .how-card{text-align:center;position:relative}
-        .how-number{width:60px;height:60px;background:var(--gradient-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:var(--font-mono);font-weight:700;font-size:1.5rem;color:var(--bg-primary);position:relative;z-index:2}
-        .how-card h3{font-size:1.15rem;font-weight:600;margin-bottom:.75rem}.how-card p{color:var(--text-secondary);font-size:.95rem;line-height:1.6}
-        
-        /* Comparison Section */
-        .comparison-section{background:var(--bg-primary)}
-        .comparison-table-wrapper{overflow-x:auto;margin-top:2rem}
-        .comparison-table{width:100%;border-collapse:collapse;min-width:800px}
-        .comparison-table th,.comparison-table td{padding:1.25rem 1rem;text-align:left;border-bottom:1px solid var(--border-subtle)}
-        .comparison-table thead th{background:var(--bg-tertiary);font-weight:600;font-size:.95rem}
-        .comparison-table thead th:first-child{border-radius:12px 0 0 0}
-        .comparison-table thead th:last-child{border-radius:0 12px 0 0}
-        .comparison-table tbody tr:hover{background:rgba(0,255,136,0.03)}
-        .comparison-table .feature-name{font-weight:500;color:var(--text-primary)}
-        .comparison-table .codegauge-col{background:rgba(0,255,136,0.05);border-left:2px solid var(--accent-primary);border-right:2px solid var(--accent-primary)}
-        .comparison-table thead .codegauge-col{background:rgba(0,255,136,0.15);border-top:2px solid var(--accent-primary);font-weight:700;color:var(--accent-primary)}
-        .comparison-table tbody tr:last-child .codegauge-col{border-bottom:2px solid var(--accent-primary)}
-        .check-icon{color:var(--accent-primary);font-weight:700;font-size:1.1rem}
-        .cross-icon{color:var(--text-muted);font-size:1.1rem}
-        .partial-icon{color:var(--accent-yellow);font-size:.85rem}
-        .comparison-note{margin-top:2rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;text-align:center}
-        .comparison-note p{color:var(--text-secondary);font-size:.95rem}
-        
-        .pricing-section{background:var(--bg-secondary)}.pricing-content{max-width:1000px;margin:0 auto}
-        .pricing-card{background:var(--bg-card);border:1px solid var(--border-accent);border-radius:24px;padding:3rem;text-align:center;position:relative;overflow:hidden}
-        .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-primary)}
-        .pricing-header{margin-bottom:2rem}.pricing-header h3{font-size:1.5rem;font-weight:700;margin-bottom:.5rem}.pricing-header p{color:var(--text-secondary)}
-        .pricing-tiers{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
-        .pricing-tier{background:var(--bg-secondary);border-radius:16px;padding:2rem;text-align:left}
-        .tier-label{font-family:var(--font-mono);font-size:.8rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
-        .tier-price{font-size:2.5rem;font-weight:700;margin-bottom:.5rem}.tier-price span{font-size:1rem;color:var(--text-muted);font-weight:400}.tier-price.free{color:var(--accent-primary)}
-        .tier-description{color:var(--text-secondary);font-size:.95rem;margin-bottom:1rem;min-height:48px}
-        .tier-features{list-style:none}.tier-features li{display:flex;align-items:flex-start;gap:.5rem;color:var(--text-secondary);font-size:.9rem;margin-bottom:.5rem}.tier-features li::before{content:'✓';color:var(--accent-primary);font-weight:700}
-        .pricing-note{background:rgba(0,255,136,0.05);border:1px solid var(--border-accent);border-radius:12px;padding:1.5rem;margin-top:1.5rem}
-        .pricing-note h4{font-size:1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;justify-content:center}.pricing-note p{color:var(--text-secondary);font-size:.9rem}
-        .engine-explainer{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;text-align:left}
-        .engine-box{background:var(--bg-tertiary);border:1px solid var(--border-subtle);border-radius:12px;padding:1.25rem}
-        .engine-box h5{font-size:.9rem;font-weight:600;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
-        .engine-box h5 span{background:var(--accent-primary);color:var(--bg-primary);padding:.1rem .4rem;border-radius:4px;font-size:.7rem}
-        .engine-box p{color:var(--text-secondary);font-size:.85rem;line-height:1.5}
-        .usecases-section{background:var(--bg-primary)}.usecases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
-        .usecase-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:2rem;transition:all .3s;text-align:center}.usecase-card:hover{border-color:var(--accent-primary);transform:translateY(-4px)}
-        .usecase-icon{width:70px;height:70px;background:rgba(0,255,136,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2rem}
-        .usecase-card h3{font-size:1.15rem;font-weight:600;margin-bottom:.75rem}.usecase-card p{color:var(--text-secondary);font-size:.95rem;line-height:1.6}
-        .vision-section{background:var(--bg-secondary);padding:8rem 2rem}.vision-content{max-width:1000px;margin:0 auto}
-        .vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-        .vision-text h2{font-size:2.5rem;font-weight:700;margin-bottom:1.5rem}.vision-text h2 span{background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .vision-text p{color:var(--text-secondary);font-size:1.1rem;line-height:1.8;margin-bottom:1.5rem}
-        .vision-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
-        .vision-stat{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:1.5rem;text-align:center}
-        .vision-stat-value{font-size:2rem;font-weight:700;color:var(--accent-primary);font-family:var(--font-mono);margin-bottom:.25rem}.vision-stat-label{font-size:.9rem;color:var(--text-muted)}
-        .cta-section{background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);text-align:center;padding:8rem 2rem}
-        .cta-content{max-width:700px;margin:0 auto}.cta-content h2{font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:1rem}.cta-content h2 span{background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .cta-content p{color:var(--text-secondary);font-size:1.1rem;margin-bottom:2rem}.cta-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}.cta-note{margin-top:2rem;font-size:.9rem;color:var(--text-muted)}
-        footer{background:var(--bg-secondary);border-top:1px solid var(--border-subtle);padding:4rem 2rem 2rem}
-        .footer-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
-        .footer-brand{max-width:350px}.footer-brand .logo{margin-bottom:1rem}.footer-brand p{color:var(--text-muted);font-size:.9rem;line-height:1.7}
-        .footer-column h4{font-size:.9rem;font-weight:600;margin-bottom:1.25rem}.footer-column ul{list-style:none}.footer-column li{margin-bottom:.75rem}.footer-column a{color:var(--text-muted);text-decoration:none;font-size:.9rem;transition:color .2s}.footer-column a:hover{color:var(--accent-primary)}
-        .footer-bottom{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:2rem;border-top:1px solid var(--border-subtle);flex-wrap:wrap;gap:1rem}
-        .footer-bottom p{color:var(--text-muted);font-size:.85rem}.footer-social{display:flex;gap:1rem}.footer-social a{width:40px;height:40px;background:var(--bg-tertiary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);text-decoration:none;transition:all .2s}.footer-social a:hover{background:var(--accent-primary);color:var(--bg-primary)}
-        @media(max-width:1200px){.hero-content{grid-template-columns:1fr;text-align:center}.hero-visual{margin-top:3rem}.hero-subtitle{margin-left:auto;margin-right:auto}.repo-badges{justify-content:center}.vision-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:repeat(2,1fr)}.mission-values{grid-template-columns:1fr}.personalization-badge.bottom{left:10px}.benefits-grid{grid-template-columns:repeat(2,1fr)}.pricing-tiers{grid-template-columns:1fr}.engine-explainer{grid-template-columns:1fr}}
-        @media(max-width:768px){.nav-links{display:none}nav{top:52px}.problem-grid,.usecases-grid,.how-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.vision-stats{grid-template-columns:1fr}.how-grid::before{display:none}.personalization-badge{display:none}.benefits-grid{grid-template-columns:1fr}.announcement-bar{font-size:.8rem;padding:.6rem .75rem}.hero{padding-top:12rem}}
-        .reveal{opacity:0;transform:translateY(30px);transition:all .8s ease}.reveal.active{opacity:1;transform:translateY(0)}
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0b;
+            --bg-card: #0f0f12;
+            --bg-elevated: #16161a;
+            --accent: #00ff9d;
+            --accent-dim: #00cc7d;
+            --accent-glow: rgba(0, 255, 157, 0.15);
+            --accent-purple: #a855f7;
+            --accent-blue: #38bdf8;
+            --accent-pink: #f472b6;
+            --accent-orange: #fb923c;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.06);
+            --gradient-accent: linear-gradient(135deg, #00ff9d 0%, #00cc7d 100%);
+            --gradient-hero: linear-gradient(135deg, #00ff9d 0%, #a855f7 50%, #38bdf8 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(0, 255, 157, 0.15) 0%, transparent 70%);
+            --nav-bg: rgba(10, 10, 11, 0.85);
+            --nav-shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Light theme overrides */
+        html[data-theme="light"] {
+            --bg-dark: #fafafa;
+            --bg-card: #ffffff;
+            --bg-elevated: #f3f4f6;
+            --text-primary: #0a0a0b;
+            --text-secondary: #111827;
+            --text-muted: #4b5563;
+            --border: rgba(0, 0, 0, 0.10);
+            --accent-glow: rgba(0, 255, 157, 0.12);
+            --nav-bg: rgba(250, 250, 250, 0.85);
+            --nav-shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+
+        /* Let the browser style built-in UI appropriately */
+        html { color-scheme: light dark; }
+
+        /* Announcement Bar */
+        .announcement {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink), var(--accent-purple));
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+            color: var(--bg-dark);
+            text-align: center;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .announcement span {
+            background: var(--bg-dark);
+            color: var(--accent);
+            padding: 0.15rem 0.5rem;
+            border-radius: 0;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-right: 0.5rem;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 36px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0.75rem 2rem;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 10px 30px var(--nav-shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--bg-dark);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: var(--bg-dark);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.35);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Theme toggle */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .theme-toggle {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle Canvas */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Animated Grid Background */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Glowing Orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+
+        .hero-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -150px;
+            right: -100px;
+            opacity: 0.12;
+        }
+
+        .hero-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-purple);
+            bottom: -100px;
+            left: -100px;
+            opacity: 0.1;
+            animation-delay: 2s;
+        }
+
+        .hero-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-blue);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08;
+            animation-delay: 4s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 157, 0.08);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-badge::before {
+            content: '>';
+            color: var(--accent);
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 .line {
+            display: block;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 3s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Typing Effect */
+        .typing-container {
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+        }
+
+        .typing-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .typing-text .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--accent);
+            margin-left: 2px;
+            animation: cursorBlink 0.8s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes cursorBlink {
+            50% { opacity: 0; }
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .repo-badges {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .repo-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .repo-badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .repo-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Terminal Window */
+        .hero-visual {
+            position: relative;
+        }
+
+        .terminal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 0 1px rgba(0, 255, 157, 0.1),
+                0 25px 80px -12px rgba(0, 0, 0, 0.6),
+                0 0 100px rgba(0, 255, 157, 0.05);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #febc2e; }
+        .terminal-dot.green { background: #28c840; }
+
+        .terminal-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-size: 0.8rem;
+            line-height: 2;
+        }
+
+        .terminal-line {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-prompt {
+            color: var(--accent);
+        }
+
+        .terminal-command {
+            color: var(--text-primary);
+        }
+
+        .terminal-output {
+            color: var(--text-muted);
+            padding-left: 1.5rem;
+        }
+
+        .terminal-comment {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .terminal-keyword { color: var(--accent-purple); }
+        .terminal-function { color: var(--accent-blue); }
+        .terminal-string { color: var(--accent); }
+        .terminal-variable { color: var(--accent-orange); }
+
+        /* Floating Elements */
+        .floating-tag {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: floatTag 5s ease-in-out infinite;
+        }
+
+        .floating-tag.top {
+            top: -10px;
+            right: 20px;
+        }
+
+        .floating-tag.bottom {
+            bottom: 20px;
+            left: -15px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatTag {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        .tag-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-glow);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .tag-text {
+            color: var(--text-muted);
+        }
+
+        .tag-text strong {
+            display: block;
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            background: var(--accent-glow);
+            border-radius: 3px;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Mission Section */
+        .mission {
+            background: var(--bg-card);
+        }
+
+        .mission-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .mission-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .mission-statement {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .mission-statement span {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientFlow 3s ease infinite;
+        }
+
+        .mission-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 255, 157, 0.08);
+        }
+
+        .value-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .value-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .value-card p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.7;
+        }
+
+        /* Benefits Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .benefit-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .benefit-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-glow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .benefit-card p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.7;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--bg-card);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-3px);
+        }
+
+        .problem-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(251, 146, 60, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .feature-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .feature-header span {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .feature-list li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* How It Works */
+        .how {
+            background: var(--bg-card);
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .how-grid::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 18%;
+            right: 18%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.3;
+        }
+
+        .how-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .how-number {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bg-dark);
+            position: relative;
+            z-index: 2;
+        }
+
+        .how-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .how-card p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+
+        /* Comparison */
+        .comparison-wrapper {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+            font-size: 0.8rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table thead th {
+            background: var(--bg-elevated);
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .comparison-table thead th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .comparison-table thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: rgba(0, 255, 157, 0.02);
+        }
+
+        .comparison-table .feature-name {
+            font-weight: 500;
+        }
+
+        .codegauge-col {
+            background: rgba(0, 255, 157, 0.05);
+            border-left: 2px solid var(--accent);
+            border-right: 2px solid var(--accent);
+        }
+
+        thead .codegauge-col {
+            background: rgba(0, 255, 157, 0.12);
+            border-top: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        tbody tr:last-child .codegauge-col {
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .check { color: var(--accent); font-weight: 700; }
+        .cross { color: var(--text-muted); }
+        .partial { color: #fbbf24; font-size: 0.7rem; }
+
+        .comparison-note {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .comparison-note p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .comparison-note strong {
+            color: var(--accent);
+        }
+
+        /* Pricing */
+        .pricing {
+            background: var(--bg-card);
+        }
+
+        .pricing-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 12px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-accent);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-header p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .pricing-tiers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-tier {
+            background: var(--bg-dark);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .tier-label {
+            font-size: 0.65rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.4rem;
+        }
+
+        .tier-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .tier-price span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .tier-price.free {
+            color: var(--accent);
+        }
+
+        .tier-description {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+            min-height: 36px;
+        }
+
+        .tier-features {
+            list-style: none;
+        }
+
+        .tier-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .tier-features li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .engine-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .engine-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .engine-box h5 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .engine-box h5 span {
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.6rem;
+        }
+
+        .engine-box p {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            line-height: 1.6;
+        }
+
+        .pricing-note {
+            background: var(--accent-glow);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .pricing-note h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-note p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Use Cases */
+        .usecases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .usecase-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .usecase-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .usecase-icon {
+            width: 52px;
+            height: 52px;
+            background: var(--accent-glow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+        }
+
+        .usecase-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .usecase-card p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.7;
+        }
+
+        /* Vision */
+        .vision {
+            background: var(--bg-card);
+        }
+
+        .vision-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .vision-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .vision-text h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .vision-text h2 span {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vision-text p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.9;
+            margin-bottom: 1rem;
+        }
+
+        .vision-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .vision-stat {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .vision-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.15rem;
+        }
+
+        .vision-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .cta-content {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .cta h2 span {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-note {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem 1.5rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand {
+            max-width: 280px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .footer-column h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .footer-social a {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-elevated);
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .footer-social a:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .repo-badges {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                margin-top: 2.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vision-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-tiers {
+                grid-template-columns: 1fr;
+            }
+
+            .engine-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sharp edges override (keep circles for dots/orbs/step numbers) */
+        .logo-icon,
+        .btn,
+        .btn-secondary,
+        .theme-toggle,
+        .hero-badge,
+        .repo-badge,
+        .terminal,
+        .floating-tag,
+        .tag-icon,
+        .section-label,
+        .mission-icon,
+        .value-card,
+        .benefit-card,
+        .benefit-icon,
+        .problem-card,
+        .problem-icon,
+        .feature-card,
+        .feature-icon,
+        .pricing-card,
+        .pricing-tier,
+        .engine-box,
+        .pricing-note,
+        .usecase-card,
+        .usecase-icon,
+        .vision-stat,
+        .footer-social a {
+            border-radius: 0 !important;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 8rem;
+            }
+
+            .problem-grid,
+            .how-grid,
+            .usecases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .how-grid::before {
+                display: none;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-tag {
+                display: none;
+            }
+
+            .vision-stats {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="announcement-bar"><span>Preview</span>CodeGauge is currently in development and and We will Launch soon.</div>
-    <nav><div class="nav-container"><a href="#" class="logo"><div class="logo-icon">CG</div><span class="logo-text">CodeGauge</span></a><ul class="nav-links"><li><a href="#mission">Mission</a></li><li><a href="#features">Features</a></li><li><a href="#how">How It Works</a></li><li><a href="#comparison">Compare</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#usecases">Use Cases</a></li></ul><div class="nav-cta"><a href="#contact" class="btn btn-primary">Get in Touch</a></div></div></nav>
+    <!-- Announcement Bar -->
+    <div class="announcement">
+        <span>PREVIEW</span>
+        CodeGauge is currently in development — We will launch soon!
+    </div>
 
-    <section class="hero"><div class="gradient-orb orb-1"></div><div class="gradient-orb orb-2"></div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">CG</div>
+                <span class="logo-text">CodeGauge</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#mission">Mission</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#comparison">Compare</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#usecases">Use Cases</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
+                    <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <a href="#contact" class="btn btn-primary">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="particles"></canvas>
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        
         <div class="hero-content">
             <div class="hero-text">
-                <div class="hero-badge">A Learning Code Engine for Better Developers</div>
-                <h1>A Personlised<br><span>Coding Companion</span></h1>
-                <p class="hero-subtitle">Stop vibe coding. CodeGauge is a learning code engine that helps individual developers and enterprise teams write better code, reduce technical debt, and increase productivity — all while matching your unique coding style.</p>
+                <div class="hero-badge">Learning Code Engine</div>
+                <h1>
+                    <span class="line">A Personalized</span>
+                    <span class="line gradient-text">Coding Companion</span>
+                </h1>
+                <div class="typing-container">
+                    <p class="typing-text">
+                        <span id="typed-text"></span><span class="cursor"></span>
+                    </p>
+                </div>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">$ get_early_access</a>
+                    <a href="#features" class="btn btn-secondary">$ explore_features</a>
+                </div>
                 <div class="repo-badges">
-                    <div class="repo-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>GitHub</div>
-                    <div class="repo-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.845.904c-1.305 0-2.369 1.064-2.369 2.37v17.452c0 1.305 1.064 2.369 2.37 2.369h14.31c1.305 0 2.369-1.064 2.369-2.37V3.275c0-1.306-1.064-2.37-2.37-2.37H4.846zm9.016 16.155l-3.32-2.381-3.32 2.381 1.267-3.9-3.32-2.381h4.105l1.268-3.9 1.267 3.9h4.106l-3.32 2.381 1.267 3.9z"/></svg>GitLab</div>
-                    <div class="repo-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M.778 1.213a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H19.95a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891L.778 1.213zM14.52 15.53H9.522L8.17 8.466h7.561l-1.211 7.064z"/></svg>Bitbucket</div>
+                    <div class="repo-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        GitHub
+                    </div>
+                    <div class="repo-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.845.904c-1.305 0-2.369 1.064-2.369 2.37v17.452c0 1.305 1.064 2.369 2.37 2.369h14.31c1.305 0 2.369-1.064 2.369-2.37V3.275c0-1.306-1.064-2.37-2.37-2.37H4.846zm9.016 16.155l-3.32-2.381-3.32 2.381 1.267-3.9-3.32-2.381h4.105l1.268-3.9 1.267 3.9h4.106l-3.32 2.381 1.267 3.9z"/></svg>
+                        GitLab
+                    </div>
+                    <div class="repo-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.778 1.213a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H19.95a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891L.778 1.213zM14.52 15.53H9.522L8.17 8.466h7.561l-1.211 7.064z"/></svg>
+                        Bitbucket
+                    </div>
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="personalization-badge top"><div class="badge-icon">🎯</div><div class="badge-text"><strong>Your Style</strong>snake_case detected</div></div>
-                <div class="code-window">
-                    <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-title">personalized_suggestion.py</span></div>
-                    <div class="code-body">
-                        <div><span class="code-comment"># Generated based on YOUR coding patterns</span></div>
-                        <div><span class="code-comment"># Learning engine adapts to your style</span></div>
-                        <div></div>
-                        <div><span class="code-keyword">def</span> <span class="code-function">fetch_user_data</span>(user_ids: <span class="code-variable">list</span>) -> <span class="code-variable">dict</span>:</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"""Fetch user data with error handling."""</span></div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">try</span>:</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response = api.<span class="code-function">get</span>(<span class="code-string">"/users"</span>, ids=user_ids)</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> response.status_code == <span class="code-variable">200</span>:</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {u[<span class="code-string">"id"</span>]: u <span class="code-keyword">for</span> u <span class="code-keyword">in</span> response.json()}</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">except</span> <span class="code-variable">APIError</span> <span class="code-keyword">as</span> e:</div>
-                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.<span class="code-function">error</span>(f<span class="code-string">"Failed: {e}"</span>)</div>
+                <div class="floating-tag top">
+                    <div class="tag-icon">🎯</div>
+                    <div class="tag-text">
+                        <strong>style: snake_case</strong>
+                        detected
                     </div>
                 </div>
-                <div class="personalization-badge bottom"><div class="badge-icon">📈</div><div class="badge-text"><strong>Learning Engine</strong>Improving over time</div></div>
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">codegauge --generate</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-comment"># Generated based on YOUR patterns</span></div>
+                        <div class="terminal-line"><span class="terminal-comment"># Engine adapts to your style</span></div>
+                        <div class="terminal-line">&nbsp;</div>
+                        <div class="terminal-line"><span class="terminal-keyword">def</span> <span class="terminal-function">fetch_user_data</span>(user_ids: <span class="terminal-variable">list</span>) -> <span class="terminal-variable">dict</span>:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-string">"""Fetch user data."""</span></div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">try</span>:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = api.<span class="terminal-function">get</span>(<span class="terminal-string">"/users"</span>)</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">return</span> {u[<span class="terminal-string">"id"</span>]: u <span class="terminal-keyword">for</span> u <span class="terminal-keyword">in</span> res}</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">except</span> <span class="terminal-variable">APIError</span> <span class="terminal-keyword">as</span> e:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log.<span class="terminal-function">error</span>(f<span class="terminal-string">"Failed: {e}"</span>)</div>
+                    </div>
+                </div>
+                <div class="floating-tag bottom">
+                    <div class="tag-icon">📈</div>
+                    <div class="tag-text">
+                        <strong>learning: active</strong>
+                        improving...
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="mission-section" id="mission">
+    <!-- Mission Section -->
+    <section class="mission" id="mission">
         <div class="mission-content reveal">
             <div class="mission-icon">🎯</div>
-            <h2 class="mission-statement">We believe AI should learn from you, <span>not the other way around</span>.</h2>
-            <p class="mission-description">Generic AI tools encourage "vibe coding" — generating code without understanding. CodeGauge is different. We're building a learning code engine that makes you a better developer by understanding your patterns, remembering your solutions, and helping you write cleaner, more maintainable code that reduces technical debt.</p>
-            <div class="mission-values">
-                <div class="value-card"><div class="value-icon">📚</div><h3>Learning, Not Just Generating</h3><p>Unlike vibe coding tools, CodeGauge helps you understand and improve. Every suggestion is an opportunity to become a better developer.</p></div>
-                <div class="value-card"><div class="value-icon">🧠</div><h3>Context Intelligence</h3><p>We remember your past solutions, understand your project structure, and surface relevant knowledge when you need it.</p></div>
-                <div class="value-card"><div class="value-icon">⚡</div><h3>Efficiency First</h3><p>Increase productivity, reduce technical debt, and lower costs. Better code means fewer bugs and less maintenance overhead.</p></div>
+            <h2 class="mission-statement">AI should learn from you, <span>not the other way around</span>.</h2>
+            <p class="mission-description">Generic AI tools encourage "vibe coding" — generating code without understanding. CodeGauge is different. We build a learning code engine that makes you better by understanding your patterns, remembering your solutions, and helping you write cleaner, more maintainable code.</p>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">📚</div>
+                    <h3>Learning, Not Generating</h3>
+                    <p>Every suggestion is an opportunity to become a better developer, not just faster.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🧠</div>
+                    <h3>Context Intelligence</h3>
+                    <p>We remember your past solutions and surface relevant knowledge when you need it.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3>Efficiency First</h3>
+                    <p>Increase productivity, reduce debt, lower costs. Better code = fewer bugs.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="benefits-section" id="benefits">
+    <!-- Benefits Section -->
+    <section id="benefits">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">Why CodeGauge</span><h2 class="section-title">Better Code. Better Developers. Better ROI.</h2><p class="section-subtitle">Help your enterprise teams and individual developers achieve measurable improvements.</p></div>
+            <div class="section-header reveal">
+                <span class="section-label">// WHY CODEGAUGE</span>
+                <h2 class="section-title">Better Code. Better Devs. Better ROI.</h2>
+                <p class="section-subtitle">Measurable improvements for teams and individuals.</p>
+            </div>
             <div class="benefits-grid reveal">
-                <div class="benefit-card"><div class="benefit-icon">📈</div><h3>Increase Productivity</h3><p>Spend less time searching for solutions you've already solved. Context recovery and personalized suggestions accelerate development.</p></div>
-                <div class="benefit-card"><div class="benefit-icon">🛠️</div><h3>Reduce Technical Debt</h3><p>Consistent coding patterns and proactive error prevention mean cleaner codebases that are easier to maintain.</p></div>
-                <div class="benefit-card"><div class="benefit-icon">💰</div><h3>Lower Costs</h3><p>Fewer bugs, less rework, faster onboarding. Better code quality translates directly to reduced development costs.</p></div>
-                <div class="benefit-card"><div class="benefit-icon">🎓</div><h3>Grow Your Skills</h3><p>A learning engine that helps you become a better coder, not just a faster one. Understand patterns, not just outputs.</p></div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📈</div>
+                    <h3>Increase Productivity</h3>
+                    <p>Context recovery and personalized suggestions accelerate development cycles.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛠️</div>
+                    <h3>Reduce Tech Debt</h3>
+                    <p>Consistent patterns and proactive error prevention = cleaner codebases.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💰</div>
+                    <h3>Lower Costs</h3>
+                    <p>Fewer bugs, less rework, faster onboarding. Quality translates to savings.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎓</div>
+                    <h3>Grow Skills</h3>
+                    <p>A learning engine that helps you understand patterns, not just copy outputs.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="problem-section" id="problem">
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">The Problem</span><h2 class="section-title">Vibe Coding is Not the Answer</h2><p class="section-subtitle">Generic AI tools encourage copying without understanding. That's not how great developers are made.</p></div>
+            <div class="section-header reveal">
+                <span class="section-label">// THE PROBLEM</span>
+                <h2 class="section-title">Vibe Coding is Not the Answer</h2>
+                <p class="section-subtitle">Generic AI encourages copying without understanding.</p>
+            </div>
             <div class="problem-grid">
-                <div class="problem-card reveal"><div class="problem-icon">🎲</div><h3>Vibe Coding Culture</h3><p>Copy-paste AI suggestions without understanding. Technical debt accumulates. Bugs multiply. Nobody knows why the code works.</p></div>
-                <div class="problem-card reveal"><div class="problem-icon">🧠</div><h3>Zero Learning</h3><p>Generic tools don't help you grow. They give the same suggestions to everyone, ignoring your skill level and learning needs.</p></div>
-                <div class="problem-card reveal"><div class="problem-icon">💸</div><h3>Hidden Costs</h3><p>Quick fixes today become expensive problems tomorrow. Poor code quality increases maintenance costs and slows teams down.</p></div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">🎲</div>
+                    <h3>Vibe Coding Culture</h3>
+                    <p>Copy-paste AI suggestions without understanding. Tech debt accumulates. Bugs multiply.</p>
+                </div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">🧠</div>
+                    <h3>Zero Learning</h3>
+                    <p>Generic tools give the same suggestions to everyone, ignoring your skill level.</p>
+                </div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">💸</div>
+                    <h3>Hidden Costs</h3>
+                    <p>Quick fixes today become expensive problems tomorrow. Poor quality slows teams.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="features-section" id="features">
+    <!-- Features Section -->
+    <section id="features">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">Core Features</span><h2 class="section-title">A Learning Engine That Grows With You</h2><p class="section-subtitle">CodeGauge builds a complete understanding of how you code, enabling truly personalized assistance.</p></div>
+            <div class="section-header reveal">
+                <span class="section-label">// CORE FEATURES</span>
+                <h2 class="section-title">A Learning Engine That Grows With You</h2>
+                <p class="section-subtitle">Complete understanding of how you code.</p>
+            </div>
             <div class="features-grid reveal">
-                <div class="feature-card"><div class="feature-header"><div class="feature-icon">🎨</div><div><h3>Personalized Code Generation</h3><span>Your Style, Every Time</span></div></div><p class="feature-description">AI suggestions that match your coding DNA — naming conventions, function structures, patterns you prefer, and error handling style.</p><ul class="feature-benefits"><li>Detects your naming style (snake_case, camelCase, etc.)</li><li>Matches your preferred patterns (list comprehensions, decorators)</li><li>Adapts to your skill level and complexity preferences</li><li>Generates docstrings and comments in your style</li></ul></div>
-                <div class="feature-card"><div class="feature-header"><div class="feature-icon">🧠</div><div><h3>Context & Knowledge Memory</h3><span>Nothing Gets Forgotten</span></div></div><p class="feature-description">Your personal knowledge graph that remembers solutions you've written, patterns you've used, and context from every project.</p><ul class="feature-benefits"><li>"You solved OAuth integration in Project X — here's that solution"</li><li>Instantly recover context when returning to old projects</li><li>Surface relevant past work when facing similar problems</li><li>Works with GitHub, GitLab, and Bitbucket repositories</li></ul></div>
-                <div class="feature-card"><div class="feature-header"><div class="feature-icon">🛡️</div><div><h3>Error Prevention AI</h3><span>Mistakes Caught Early</span></div></div><p class="feature-description">Learns from your mistake patterns and warns you before you make the same error twice. Reduce bugs before they happen.</p><ul class="feature-benefits"><li>"You've made this exact mistake 3 times before"</li><li>Shows what solutions worked in previous instances</li><li>Predicts potential bugs based on your patterns</li><li>Proactive warnings, not reactive debugging</li></ul></div>
-                <div class="feature-card"><div class="feature-header"><div class="feature-icon">⚡</div><div><h3>Intelligent Stuck Detection</h3><span>Help When You Need It</span></div></div><p class="feature-description">Multi-signal algorithm detects when you're actually struggling — and only offers help then. No random interruptions.</p><ul class="feature-benefits"><li>Monitors typing patterns, deletions, and undo frequency</li><li>Detects frustration signals like repeated errors</li><li>Asks permission before offering suggestions</li><li>Learn from the help, don't just copy it</li></ul></div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">🎨</div>
+                        <div>
+                            <h3>Personalized Generation</h3>
+                            <span>your_style.every_time()</span>
+                        </div>
+                    </div>
+                    <p class="feature-description">AI suggestions that match your coding DNA — naming conventions, function structures, patterns.</p>
+                    <ul class="feature-list">
+                        <li>Detects naming style (snake_case, camelCase)</li>
+                        <li>Matches your preferred patterns</li>
+                        <li>Adapts to skill level and complexity</li>
+                        <li>Generates docs in your style</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">🧠</div>
+                        <div>
+                            <h3>Context Memory</h3>
+                            <span>nothing.gets_forgotten()</span>
+                        </div>
+                    </div>
+                    <p class="feature-description">Personal knowledge graph that remembers solutions, patterns, and context from every project.</p>
+                    <ul class="feature-list">
+                        <li>"You solved OAuth in Project X — here's that solution"</li>
+                        <li>Instant context recovery for old projects</li>
+                        <li>Surface relevant past work automatically</li>
+                        <li>Works with GitHub, GitLab, Bitbucket</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">🛡️</div>
+                        <div>
+                            <h3>Error Prevention</h3>
+                            <span>mistakes.caught_early()</span>
+                        </div>
+                    </div>
+                    <p class="feature-description">Learns from your mistake patterns and warns before you repeat them.</p>
+                    <ul class="feature-list">
+                        <li>"You've made this mistake 3 times before"</li>
+                        <li>Shows solutions that worked previously</li>
+                        <li>Predicts potential bugs from patterns</li>
+                        <li>Proactive warnings, not reactive debugging</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">⚡</div>
+                        <div>
+                            <h3>Stuck Detection</h3>
+                            <span>help.when_needed()</span>
+                        </div>
+                    </div>
+                    <p class="feature-description">Detects when you're struggling and only offers help then. No interruptions.</p>
+                    <ul class="feature-list">
+                        <li>Monitors typing patterns and undo frequency</li>
+                        <li>Detects frustration signals</li>
+                        <li>Asks permission before suggesting</li>
+                        <li>Learn from help, don't just copy</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="how-section" id="how">
+    <!-- How It Works -->
+    <section class="how" id="how">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">How It Works</span><h2 class="section-title">From Your Code to Your AI</h2><p class="section-subtitle">CodeGauge learns continuously from how you work, building a personalized intelligence layer.</p></div>
+            <div class="section-header reveal">
+                <span class="section-label">// HOW IT WORKS</span>
+                <h2 class="section-title">From Your Code to Your AI</h2>
+                <p class="section-subtitle">Building a personalized intelligence layer.</p>
+            </div>
             <div class="how-grid reveal">
-                <div class="how-card"><div class="how-number">1</div><h3>Learn Your Patterns</h3><p>We analyze your git history from GitHub, GitLab, or Bitbucket — understanding your coding style, naming conventions, and complexity preferences.</p></div>
-                <div class="how-card"><div class="how-number">2</div><h3>Build Your Context</h3><p>Your solutions, decisions, and knowledge get indexed into a personal knowledge graph. Every problem you solve becomes retrievable context.</p></div>
-                <div class="how-card"><div class="how-number">3</div><h3>Generate & Learn</h3><p>When you need help, we combine your style profile with your knowledge graph — and help you understand the suggestions, not just use them.</p></div>
+                <div class="how-card">
+                    <div class="how-number">1</div>
+                    <h3>Learn Patterns</h3>
+                    <p>Analyze your git history — understanding style, naming conventions, complexity preferences.</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-number">2</div>
+                    <h3>Build Context</h3>
+                    <p>Solutions and knowledge indexed into a personal graph. Every solve becomes retrievable.</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-number">3</div>
+                    <h3>Generate & Learn</h3>
+                    <p>Combine style + knowledge graph. Help you understand suggestions, not just use them.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Competitor Comparison Section -->
-    <section class="comparison-section" id="comparison">
+    <!-- Comparison Section -->
+    <section id="comparison">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">Comparison</span><h2 class="section-title">How CodeGauge Stacks Up</h2><p class="section-subtitle">See how we compare to other AI coding tools on the features that matter most.</p></div>
-            <div class="comparison-table-wrapper reveal">
+            <div class="section-header reveal">
+                <span class="section-label">// COMPARISON</span>
+                <h2 class="section-title">How CodeGauge Stacks Up</h2>
+                <p class="section-subtitle">Features that matter most.</p>
+            </div>
+            <div class="comparison-wrapper reveal">
                 <table class="comparison-table">
                     <thead>
                         <tr>
                             <th>Feature</th>
                             <th class="codegauge-col">CodeGauge</th>
-                            <th>GitHub Copilot</th>
+                            <th>Copilot</th>
                             <th>Cursor</th>
                             <th>Tabnine</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="feature-name">Personalized to Your Coding Style</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="partial-icon">Partial</span></td>
+                            <td class="feature-name">Personalized to Your Style</td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="partial">Partial</span></td>
                         </tr>
                         <tr>
-                            <td class="feature-name">Learns from Your Git History</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="feature-name">Learns from Git History</td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
                             <td class="feature-name">Context Memory Across Sessions</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="partial-icon">Limited</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="partial">Limited</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
                             <td class="feature-name">Personal Knowledge Graph</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
-                            <td class="feature-name">Error Prevention from Past Mistakes</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="feature-name">Error Prevention from Mistakes</td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
                             <td class="feature-name">Intelligent Stuck Detection</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
-                            <td class="feature-name">Adapts to Your Skill Level</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="feature-name">Adapts to Skill Level</td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                         <tr>
-                            <td class="feature-name">Multi-Repo Platform Support</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="partial-icon">GitHub only</span></td>
-                            <td><span class="check-icon">✓</span></td>
-                            <td><span class="check-icon">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td class="feature-name">Helps You Learn, Not Just Copy</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                        </tr>
-                        <tr>
-                            <td class="feature-name">Pay-As-You-Go LLM Costs</td>
-                            <td class="codegauge-col"><span class="check-icon">✓</span></td>
-                            <td><span class="cross-icon">✗</span></td>
-                            <td><span class="partial-icon">Limited</span></td>
-                            <td><span class="cross-icon">✗</span></td>
+                            <td class="feature-name">Pay-As-You-Go LLM</td>
+                            <td class="codegauge-col"><span class="check">✓</span></td>
+                            <td><span class="cross">✗</span></td>
+                            <td><span class="partial">Limited</span></td>
+                            <td><span class="cross">✗</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="comparison-note reveal">
-                <p>Other tools generate generic code for everyone. <strong>CodeGauge learns YOU</strong> — your patterns, your history, your style — to provide truly personalized assistance that makes you a better developer.</p>
+                <p>Other tools generate generic code. <strong>CodeGauge learns YOU</strong> — your patterns, history, style.</p>
             </div>
         </div>
     </section>
 
-    <section class="pricing-section" id="pricing">
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">Pricing</span><h2 class="section-title">Simple, Transparent Pricing</h2><p class="section-subtitle">Start free. Pay only for what you use.</p></div>
-            <div class="pricing-content reveal">
-                <div class="pricing-card">
-                    <div class="pricing-header"><h3>CodeGauge Platform</h3><p>For individual developers and enterprise teams</p></div>
-                    <div class="pricing-tiers">
-                        <div class="pricing-tier">
-                            <div class="tier-label">Free Tier</div>
-                            <div class="tier-price free">$0</div>
-                            <div class="tier-description">Get started with limited projects and credits</div>
-                            <ul class="tier-features">
-                                <li>3 projects with personalization (Engine 1)</li>
-                                <li>10 code generation credits/month (Engine 2)</li>
-                                <li>GitHub, GitLab, Bitbucket support</li>
-                                <li>Basic context & knowledge memory</li>
-                                <li>Error prevention AI</li>
-                            </ul>
-                        </div>
-                        <div class="pricing-tier">
-                            <div class="tier-label">Pro Tier</div>
-                            <div class="tier-price">$5 <span>/user/month</span></div>
-                            <div class="tier-description">Unlimited personalization + pay-as-you-go generation</div>
-                            <ul class="tier-features">
-                                <li>Unlimited projects with personalization (Engine 1)</li>
-                                <li>Pay-as-you-go code generation (Engine 2)</li>
-                                <li>All repository integrations</li>
-                                <li>Advanced context recovery</li>
-                                <li>Team knowledge sharing</li>
-                                <li>Priority support</li>
-                            </ul>
-                        </div>
+            <div class="section-header reveal">
+                <span class="section-label">// PRICING</span>
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">Start free. Pay only for what you use.</p>
+            </div>
+            <div class="pricing-card reveal">
+                <div class="pricing-header">
+                    <h3>CodeGauge Platform</h3>
+                    <p>For individuals and enterprise teams</p>
+                </div>
+                <div class="pricing-tiers">
+                    <div class="pricing-tier">
+                        <div class="tier-label">FREE TIER</div>
+                        <div class="tier-price free">$0</div>
+                        <div class="tier-description">Limited projects and credits</div>
+                        <ul class="tier-features">
+                            <li>3 projects with personalization</li>
+                            <li>10 code generation credits/mo</li>
+                            <li>GitHub, GitLab, Bitbucket</li>
+                            <li>Basic context memory</li>
+                            <li>Error prevention AI</li>
+                        </ul>
                     </div>
-                    <div class="engine-explainer">
-                        <div class="engine-box">
-                            <h5>🎯 Engine 1 <span>Personalization</span></h5>
-                            <p>Analyzes your git history and coding patterns to build your unique developer profile. Runs in the background — included in your plan with no per-use charges.</p>
-                        </div>
-                        <div class="engine-box">
-                            <h5>⚡ Engine 2 <span>Code Generation</span></h5>
-                            <p>Generates personalized code suggestions using your profile + LLM. Each generation uses credits (Free) or pay-as-you-go pricing (Pro) for LLM costs.</p>
-                        </div>
+                    <div class="pricing-tier">
+                        <div class="tier-label">PRO TIER</div>
+                        <div class="tier-price">$5 <span>/user/mo</span></div>
+                        <div class="tier-description">Unlimited + pay-as-you-go</div>
+                        <ul class="tier-features">
+                            <li>Unlimited projects</li>
+                            <li>Pay-as-you-go generation</li>
+                            <li>All repo integrations</li>
+                            <li>Advanced context recovery</li>
+                            <li>Team knowledge sharing</li>
+                            <li>Priority support</li>
+                        </ul>
                     </div>
-                    <div class="pricing-note"><h4>💡 How Credits Work</h4><p>The $5/month Pro fee covers unlimited Engine 1 personalization across all your projects. Code generation (Engine 2) is pay-as-you-go based on actual LLM usage — you only pay for what you use, with full cost transparency.</p></div>
+                </div>
+                <div class="engine-grid">
+                    <div class="engine-box">
+                        <h5>🎯 Engine 1 <span>Personalization</span></h5>
+                        <p>Analyzes git history to build your unique profile. Included with no per-use charges.</p>
+                    </div>
+                    <div class="engine-box">
+                        <h5>⚡ Engine 2 <span>Generation</span></h5>
+                        <p>Personalized code suggestions using profile + LLM. Pay-as-you-go for actual usage.</p>
+                    </div>
+                </div>
+                <div class="pricing-note">
+                    <h4>💡 How Credits Work</h4>
+                    <p>$5/mo covers unlimited personalization. Generation is pay-as-you-go based on actual LLM usage.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="usecases-section" id="usecases">
+    <!-- Use Cases Section -->
+    <section id="usecases">
         <div class="section-container">
-            <div class="section-header reveal"><span class="section-label">Use Cases</span><h2 class="section-title">Built for Real Developer Workflows</h2><p class="section-subtitle">From individual productivity to enterprise team efficiency.</p></div>
+            <div class="section-header reveal">
+                <span class="section-label">// USE CASES</span>
+                <h2 class="section-title">Built for Real Workflows</h2>
+                <p class="section-subtitle">Individual productivity to enterprise efficiency.</p>
+            </div>
             <div class="usecases-grid reveal">
-                <div class="usecase-card"><div class="usecase-icon">👩‍💻</div><h3>Individual Developers</h3><p>Become a better coder with AI that learns your style and helps you understand, not just copy. Grow your skills over time.</p></div>
-                <div class="usecase-card"><div class="usecase-icon">🏢</div><h3>Enterprise Teams</h3><p>Standardize coding practices, preserve institutional knowledge, and reduce technical debt across your organization.</p></div>
-                <div class="usecase-card"><div class="usecase-icon">🔄</div><h3>Context Recovery</h3><p>Return to old projects with instant context. "You worked on auth 2 months ago — here's everything you need to remember."</p></div>
-                <div class="usecase-card"><div class="usecase-icon">🚀</div><h3>Faster Onboarding</h3><p>New team members get personalized guidance based on their skill level and the codebase patterns they need to learn.</p></div>
-                <div class="usecase-card"><div class="usecase-icon">🎓</div><h3>Continuous Learning</h3><p>Track your skill evolution over time. Get suggestions that gently push you toward better patterns and practices.</p></div>
-                <div class="usecase-card"><div class="usecase-icon">🛡️</div><h3>Quality Assurance</h3><p>Reduce bugs before they happen. Proactive warnings based on your personal and team error patterns.</p></div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">👩‍💻</div>
+                    <h3>Individual Devs</h3>
+                    <p>AI that learns your style and helps you understand, not just copy. Grow over time.</p>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🏢</div>
+                    <h3>Enterprise Teams</h3>
+                    <p>Standardize practices, preserve knowledge, reduce debt across the org.</p>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🔄</div>
+                    <h3>Context Recovery</h3>
+                    <p>Return to old projects with instant context. Remember everything.</p>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🚀</div>
+                    <h3>Faster Onboarding</h3>
+                    <p>Personalized guidance based on skill level and codebase patterns.</p>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🎓</div>
+                    <h3>Continuous Learning</h3>
+                    <p>Track skill evolution. Suggestions that push toward better patterns.</p>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🛡️</div>
+                    <h3>Quality Assurance</h3>
+                    <p>Reduce bugs before they happen. Proactive warnings from patterns.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="vision-section" id="vision">
+    <!-- Vision Section -->
+    <section class="vision" id="vision">
         <div class="vision-content reveal">
             <div class="vision-grid">
-                <div class="vision-text"><span class="section-label">Our Vision</span><h2>The Future of <span>Developer Growth</span></h2><p>We're building toward a world where AI makes developers better, not lazier. Where code quality improves over time. Where switching projects doesn't mean losing context. Where enterprise teams can maintain consistency without sacrificing individual style.</p><p>A learning code engine that grows with you — not one that does your thinking for you.</p></div>
+                <div class="vision-text">
+                    <span class="section-label">// OUR VISION</span>
+                    <h2>The Future of <span>Developer Growth</span></h2>
+                    <p>Building toward a world where AI makes developers better, not lazier. Where code quality improves over time. Where switching projects doesn't mean losing context.</p>
+                    <p>A learning engine that grows with you — not one that does your thinking for you.</p>
+                </div>
                 <div class="vision-stats">
-                    <div class="vision-stat"><div class="vision-stat-value">100%</div><div class="vision-stat-label">Style-matched suggestions</div></div>
-                    <div class="vision-stat"><div class="vision-stat-value">∞</div><div class="vision-stat-label">Context memory retention</div></div>
-                    <div class="vision-stat"><div class="vision-stat-value">3</div><div class="vision-stat-label">Major repo platforms</div></div>
-                    <div class="vision-stat"><div class="vision-stat-value">0</div><div class="vision-stat-label">Vibe coding encouraged</div></div>
+                    <div class="vision-stat">
+                        <div class="vision-stat-value">100%</div>
+                        <div class="vision-stat-label">Style-matched</div>
+                    </div>
+                    <div class="vision-stat">
+                        <div class="vision-stat-value">∞</div>
+                        <div class="vision-stat-label">Context memory</div>
+                    </div>
+                    <div class="vision-stat">
+                        <div class="vision-stat-value">3</div>
+                        <div class="vision-stat-label">Repo platforms</div>
+                    </div>
+                    <div class="vision-stat">
+                        <div class="vision-stat-value">0</div>
+                        <div class="vision-stat-label">Vibe coding</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="cta-section" id="contact">
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
         <div class="cta-content reveal">
             <h2>Ready to Code <span>Smarter</span>?</h2>
-            <p>We're building the future of developer intelligence. Interested in early access, enterprise partnerships, or just want to learn more?</p>
-            <div class="cta-buttons"><a href="mailto:parteekjain@updesk.in" class="btn btn-primary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Get in Touch</a></div>
-            <p class="cta-note">Currently in development • Seeking early partners and enterprise design partners</p>
+            <p>Building the future of developer intelligence. Interested in early access or partnerships?</p>
+            <div class="cta-buttons">
+                <a href="mailto:parteekjain@updesk.in" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    $ contact --now
+                </a>
+            </div>
+            <p class="cta-note">// Currently in development • Seeking early partners</p>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-grid">
-            <div class="footer-brand"><a href="#" class="logo"><div class="logo-icon">CG</div><span class="logo-text">CodeGauge</span></a><p>A learning code engine that helps developers write better code. Not vibe coding — real growth. Supports GitHub, GitLab, and Bitbucket.</p></div>
-            <div class="footer-column"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#how">How It Works</a></li><li><a href="#comparison">Compare</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#usecases">Use Cases</a></li></ul></div>
-            <div class="footer-column"><h4>Connect</h4><ul><li><a href="https://www.linkedin.com/in/parteekjain45/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="mailto:parteekjain@updesk.in">Contact</a></li></ul></div>
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">CG</div>
+                    <span class="logo-text">CodeGauge</span>
+                </a>
+                <p>A learning code engine that helps developers write better code. Not vibe coding — real growth.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how">How It Works</a></li>
+                    <li><a href="#comparison">Compare</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#usecases">Use Cases</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/parteekjain45/" target="_blank" rel="noopener">LinkedIn</a></li>
+                    <li><a href="mailto:parteekjain@updesk.in">Contact</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-bottom"><p>© 2025 CodeGauge. All rights reserved.</p><div class="footer-social"><a href="https://www.linkedin.com/in/parteekjain45/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a></div></div>
+        <div class="footer-bottom">
+            <p>© 2025 CodeGauge. All rights reserved.</p>
+            <div class="footer-social">
+                <a href="https://www.linkedin.com/in/parteekjain45/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+            </div>
+        </div>
     </footer>
 
     <script>
-        const reveals=document.querySelectorAll('.reveal');function checkReveal(){reveals.forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-150)el.classList.add('active')});}window.addEventListener('scroll',checkReveal);checkReveal();document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});});});
+        // Particle Animation
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 157, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 255, 157, ${0.1 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Typing Effect
+        const phrases = [
+            "Stop vibe coding. CodeGauge is a learning engine that helps developers write better code, reduce technical debt, and increase productivity — all while matching your unique coding style.",
+            "AI that learns YOUR patterns. Remembers YOUR solutions. Matches YOUR style. Makes YOU a better developer.",
+            "From your git history to personalized suggestions. Context that never forgets. Code that's truly yours."
+        ];
+
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typedText = document.getElementById('typed-text');
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typedText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typedText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 20 : 30;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 3000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        setTimeout(type, 1000);
+
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        
+        function checkReveal() {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const revealPoint = 100;
+                
+                if (elementTop < windowHeight - revealPoint) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
+
+        // Theme toggle
+        const THEME_KEY = 'codegauge_theme';
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        function setTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+            localStorage.setItem(THEME_KEY, theme);
+
+            // moon for dark, sun for light
+            if (theme === 'light') {
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2"></path><path d="M12 21v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path>';
+            } else {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            }
+        }
+
+        function getInitialTheme() {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved === 'light' || saved === 'dark') return saved;
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+
+        setTheme(getInitialTheme());
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+            setTheme(current === 'light' ? 'dark' : 'light');
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
     </script>
 </body>
 </html>
