@@ -2314,6 +2314,18 @@
                 }
             });
         });
+
+        // Keep nav positioned below the announcement bar (handles multi-line height on mobile)
+        const announcementBar = document.querySelector('.announcement');
+        const navBar = document.querySelector('nav');
+
+        function updateNavOffset() {
+            if (!announcementBar || !navBar) return;
+            navBar.style.top = `${announcementBar.offsetHeight}px`;
+        }
+
+        window.addEventListener('load', updateNavOffset);
+        window.addEventListener('resize', updateNavOffset);
     </script>
 </body>
 </html>
