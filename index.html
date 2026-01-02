@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeGauge | AI That Codes Like You</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -259,16 +258,16 @@
             z-index: 0;
         }
 
-        /* Subtle Grid Background (Greptile-inspired, toned down) */
+        /* Animated Grid Background */
         .hero-grid {
             position: absolute;
             inset: 0;
             background-image: 
-                linear-gradient(rgba(0, 255, 157, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 157, 0.02) 1px, transparent 1px);
-            background-size: 80px 80px;
-            mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-            opacity: 0.35;
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+            animation: gridPulse 4s ease-in-out infinite;
         }
 
         @keyframes gridPulse {
@@ -276,9 +275,12 @@
             50% { opacity: 1; }
         }
 
-        /* Glowing Orbs (disabled for a cleaner, panel-based hero) */
+        /* Glowing Orbs */
         .hero-orb {
-            display: none;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: orbFloat 8s ease-in-out infinite;
         }
 
         .hero-orb-1 {
@@ -318,12 +320,12 @@
         }
 
         .hero-content {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-            gap: 3.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
             align-items: center;
             position: relative;
             z-index: 1;
@@ -335,13 +337,13 @@
             gap: 0.5rem;
             background: rgba(0, 255, 157, 0.08);
             border: 1px solid rgba(0, 255, 157, 0.2);
-            padding: 0.35rem 0.75rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 4px;
             font-size: 0.7rem;
             color: var(--accent);
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.16em;
+            letter-spacing: 0.1em;
         }
 
         .hero-badge::before {
@@ -355,11 +357,11 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.4rem, 4.4vw, 3.2rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.25rem;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
         }
 
         .hero h1 .line {
@@ -883,14 +885,6 @@
             content: '→';
             color: var(--accent);
             font-weight: 700;
-        }
-
-        .context {
-            background: var(--bg-card);
-        }
-
-        .review {
-            background: var(--bg-elevated);
         }
 
         /* How It Works */
@@ -1576,8 +1570,6 @@
             <ul class="nav-links">
                 <li><a href="#mission">Mission</a></li>
                 <li><a href="#features">Features</a></li>
-                <li><a href="#context">Context Recovery</a></li>
-                <li><a href="#review">Code Review</a></li>
                 <li><a href="#how">How It Works</a></li>
                 <li><a href="#comparison">Compare</a></li>
                 <li><a href="#pricing">Pricing</a></li>
@@ -1598,13 +1590,16 @@
     <section class="hero">
         <canvas id="particles"></canvas>
         <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
         
         <div class="hero-content">
             <div class="hero-text">
-                <div class="hero-badge">AI Code Review • Context Recovery</div>
+                <div class="hero-badge">Learning Code Engine</div>
                 <h1>
-                    <span class="line">The AI code reviewer</span>
-                    <span class="line gradient-text">that remembers your work</span>
+                    <span class="line">A Personalized</span>
+                    <span class="line gradient-text">Coding Companion</span>
                 </h1>
                 <div class="typing-container">
                     <p class="typing-text">
@@ -1613,7 +1608,7 @@
                 </div>
                 <div class="hero-cta">
                     <a href="#contact" class="btn btn-primary">$ get_early_access</a>
-                    <a href="#how" class="btn btn-secondary">$ see_how_it_works</a>
+                    <a href="#features" class="btn btn-secondary">$ explore_features</a>
                 </div>
                 <div class="repo-badges">
                     <div class="repo-badge">
@@ -1631,25 +1626,38 @@
                 </div>
             </div>
             <div class="hero-visual">
+                <div class="floating-tag top">
+                    <div class="tag-icon">🎯</div>
+                    <div class="tag-text">
+                        <strong>style: snake_case</strong>
+                        detected
+                    </div>
+                </div>
                 <div class="terminal">
                     <div class="terminal-header">
                         <span class="terminal-dot red"></span>
                         <span class="terminal-dot yellow"></span>
                         <span class="terminal-dot green"></span>
-                        <span class="terminal-title">codegauge // context & review</span>
+                        <span class="terminal-title">codegauge --generate</span>
                     </div>
                     <div class="terminal-body">
-                        <div class="terminal-line"><span class="terminal-comment"># Context Recovery</span></div>
-                        <div class="terminal-line"><span class="terminal-comment"># Jump back into any branch, file, or PR with full history.</span></div>
+                        <div class="terminal-line"><span class="terminal-comment"># Generated based on YOUR patterns</span></div>
+                        <div class="terminal-line"><span class="terminal-comment"># Engine adapts to your style</span></div>
                         <div class="terminal-line">&nbsp;</div>
-                        <div class="terminal-line"><span class="terminal-keyword">$</span> codegauge <span class="terminal-function">recover</span> <span class="terminal-string">"oauth callback bug"</span></div>
-                        <div class="terminal-line terminal-output">↳ found 3 past fixes across 2 repos</div>
-                        <div class="terminal-line terminal-output">↳ surfacing diff + explanation that matched your style</div>
-                        <div class="terminal-line">&nbsp;</div>
-                        <div class="terminal-line"><span class="terminal-comment"># Code Review</span></div>
-                        <div class="terminal-line"><span class="terminal-keyword">$</span> codegauge <span class="terminal-function">review</span> <span class="terminal-string">"feature/payments-refactor"</span></div>
-                        <div class="terminal-line terminal-output">✓ checked for bugs, exceptions, security issues, tech debt</div>
-                        <div class="terminal-line terminal-output">✓ comments generated with full-project context</div>
+                        <div class="terminal-line"><span class="terminal-keyword">def</span> <span class="terminal-function">fetch_user_data</span>(user_ids: <span class="terminal-variable">list</span>) -> <span class="terminal-variable">dict</span>:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-string">"""Fetch user data."""</span></div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">try</span>:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = api.<span class="terminal-function">get</span>(<span class="terminal-string">"/users"</span>)</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">return</span> {u[<span class="terminal-string">"id"</span>]: u <span class="terminal-keyword">for</span> u <span class="terminal-keyword">in</span> res}</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-keyword">except</span> <span class="terminal-variable">APIError</span> <span class="terminal-keyword">as</span> e:</div>
+                        <div class="terminal-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log.<span class="terminal-function">error</span>(f<span class="terminal-string">"Failed: {e}"</span>)</div>
+                    </div>
+                </div>
+                <div class="floating-tag bottom">
+                    <div class="tag-icon">📈</div>
+                    <div class="tag-text">
+                        <strong>learning: active</strong>
+                        improving...
                     </div>
                 </div>
             </div>
@@ -1814,92 +1822,6 @@
                         <li>Detects frustration signals</li>
                         <li>Asks permission before suggesting</li>
                         <li>Learn from help, don't just copy</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Context Recovery Section -->
-    <section class="context" id="context">
-        <div class="section-container">
-            <div class="section-header reveal">
-                <span class="section-label">// CONTEXT RECOVERY</span>
-                <h2 class="section-title">Context Recovery That Remembers Everything</h2>
-                <p class="section-subtitle">Turn every past solve into instant, searchable context across repos and projects.</p>
-            </div>
-            <div class="features-grid reveal">
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon">🧭</div>
-                        <div>
-                            <h3>Stay Oriented</h3>
-                            <span>never_lose_context()</span>
-                        </div>
-                    </div>
-                    <p class="feature-description">CodeGauge keeps track of what you were doing so you can jump back into flow in seconds.</p>
-                    <ul class="feature-list">
-                        <li>Instant context recovery in seconds</li>
-                        <li>Never lose your train of thought between sessions</li>
-                        <li>Turn context switching from a tax into an advantage</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon">🗂️</div>
-                        <div>
-                            <h3>Recall Past Solutions</h3>
-                            <span>answers.on_demand()</span>
-                        </div>
-                    </div>
-                    <p class="feature-description">Your previous work becomes a knowledge base that is automatically surfaced when relevant.</p>
-                    <ul class="feature-list">
-                        <li>Automatic surfacing of past solutions</li>
-                        <li>Cross-project knowledge at your fingertips</li>
-                        <li>Stop re-solving the same problems over and over</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Code Review Section -->
-    <section class="review" id="review">
-        <div class="section-container">
-            <div class="section-header reveal">
-                <span class="section-label">// CODE REVIEW</span>
-                <h2 class="section-title">Code Review That Knows Your Codebase</h2>
-                <p class="section-subtitle">Go beyond generic linting with reviews grounded in how your systems actually work.</p>
-            </div>
-            <div class="features-grid reveal">
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon">🧪</div>
-                        <div>
-                            <h3>Catch Bugs Early</h3>
-                            <span>fail_fast.fix_faster()</span>
-                        </div>
-                    </div>
-                    <p class="feature-description">Surface issues before they hit production so you can ship confidently.</p>
-                    <ul class="feature-list">
-                        <li>Find logical bugs and edge cases</li>
-                        <li>Spot fragile error paths and missing exception handling</li>
-                        <li>Highlight performance footguns before they spread</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon">🔍</div>
-                        <div>
-                            <h3>Harden Your Code</h3>
-                            <span>security.first()</span>
-                        </div>
-                    </div>
-                    <p class="feature-description">Reviews are opinionated about long-term health, not just passing tests today.</p>
-                    <ul class="feature-list">
-                        <li>Detect security loopholes and unsafe patterns</li>
-                        <li>Call out accumulating tech debt and brittle abstractions</li>
-                        <li>Encourage consistent, maintainable patterns over time</li>
                     </ul>
                 </div>
             </div>
@@ -2298,9 +2220,9 @@
 
         // Typing Effect
         const phrases = [
-            "Stop vibe coding. CodeGauge reviews your code with full-context understanding and a memory of how you actually build systems.",
-            "Context recovery in seconds, smart code review that catches bugs and security issues, and suggestions that match your style.",
-            "From your git history to personalized review and recallable past solutions. Context that never forgets, code that's truly yours."
+            "Stop vibe coding. CodeGauge is a learning engine that helps developers write better code, reduce technical debt, and increase productivity — all while matching your unique coding style.",
+            "AI that learns YOUR patterns. Remembers YOUR solutions. Matches YOUR style. Makes YOU a better developer.",
+            "From your git history to personalized suggestions. Context that never forgets. Code that's truly yours."
         ];
 
         let phraseIndex = 0;
